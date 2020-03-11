@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ninoimager": {
+      "commandName": "Project",
+      "commandLineArgs": "-export camp_system01.NCLR btnA_editlist.NCGR btnA_editlist.NANR Imagenes"
+    }
+  }
+}

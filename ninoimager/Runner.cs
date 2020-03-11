@@ -30,37 +30,38 @@ namespace Ninoimager
 
     public class Runner
     {
-        readonly Options options;
+        private readonly ExportMultiNscr Export;
+        private readonly string Type;
 
-        public Runner(Options options)
+        public Runner(ExportMultiNscr export, string type)
         {
-            this.options = options;
+            this.Export = export;
+            this.Type = type;
         }
 
         public void Run()
         {
-            Environment.CurrentDirectory = options.WorkingDirectory;
 
-            if (options.ExportMultiNscr != null) {
-                foreach (var param in options.ExportMultiNscr)
-                    ExportMultiNscr(param);
+            if (Type == "exp") {
+                ExportMultiNscr();
+
             }
 
-            if (options.ImportMultiNscr != null) {
+            /*if (options.ImportMultiNscr != null) {
                 foreach (var param in options.ImportMultiNscr)
                     ImportMultiNscr(param);
-            }
+            }*/
         }
 
-        void ExportMultiNscr(ExportMultiNscr param)
+        void ExportMultiNscr()
         {
-            Nclr nclr = new Nclr(param.InputPalette);
-            Ncgr ncgr = new Ncgr(param.InputTiles);
+            Nclr nclr = new Nclr(Export.InputPalette);
+            Ncgr ncgr = new Ncgr(Export.InputTiles);
 
-            foreach (var inputMap in param.InputMaps) {
+            foreach (var inputMap in Export.InputMaps) {
                 string name = Path.GetFileNameWithoutExtension(inputMap);
-                string output = Path.Combine(param.Output, name + ".png");
-                Directory.CreateDirectory(param.Output);
+                string output = Path.Combine(Export.Output, name + ".png");
+                Directory.CreateDirectory(Export.Output);
 
                 Console.WriteLine($"Exporting {name} to {output}");
                 Nscr nscr = new Nscr(inputMap);

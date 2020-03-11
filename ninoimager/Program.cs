@@ -36,31 +36,32 @@ namespace Ninoimager
         {
             Console.WriteLine("ninoimager ~~ Image importer and exporter for Ni no kuni DS");
             Console.WriteLine("V {0} ~~ by pleoNeX ~~", Assembly.GetExecutingAssembly().GetName().Version);
+            
             Console.WriteLine();
 
             if (args.Length == 0) {
-                Console.WriteLine("Missing file with configuration settings");
+                Console.WriteLine("Export: -export \"File.nclr\" \"file.ncgr\" \"file.ncsr\" \"file.png\"");
                 Environment.Exit(1);
             }
 
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-
-            if (args[0] == "-n") {
-                NinokuniImporter.RunCommand(args);
-            } else {
-                string yaml = args[0];
-                Options options = new DeserializerBuilder()
-                    .WithNamingConvention(new UnderscoredNamingConvention())
-                    .Build()
-                    .Deserialize<Options>(File.ReadAllText(yaml));
-
-                var runner = new Runner(options);
-                runner.Run();
+            if (args[0] == "-export")
+            {
+                ExportImage(args[1], args[2], args[3], args[4]);
+                Console.WriteLine("La operación ha finalizado.");
             }
 
-            watch.Stop();
-            Console.WriteLine("It tooks: {0}", watch.Elapsed);
+        }
+
+
+        public static void ExportImage(string palette, string tile, string maps, string output)
+        {
+            var export = new ExportMultiNscr
+            {
+                InputPalette = palette, InputMaps = new[] {maps}, InputTiles = tile, Output = output
+            };
+            var run = new Runner(export, "exp");
+            run.Run();
+
         }
     }
 }
